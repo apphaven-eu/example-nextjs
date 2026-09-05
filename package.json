@@ -1,0 +1,28 @@
+{
+  "name": "example-nextjs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Todo example for AppHaven using Next.js and PostgreSQL",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "node .next/standalone/server.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "next": "15.5.25",
+    "pg": "^8.16.3",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@types/pg": "^8.15.5",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "typescript": "^5.8.3"
+  },
+  "license": "MIT"
+}
