@@ -8,6 +8,8 @@ The repository includes the application, a `Dockerfile`, and an `apphaven.yaml` 
 ## Stack
 
 - Next.js 15 (App Router), React 19, TypeScript
+- Server Components and Server Actions, with JSX escaping values by default; the stylesheet
+  is `app/globals.css` and the schema is read from `schema.sql`
 - `pg` driver, parameterised SQL, no ORM
 - PostgreSQL 17
 - Container base: `node:22-alpine`, Next.js `output: "standalone"`
@@ -89,8 +91,9 @@ Open the app, add a task, refresh, and delete it. The manifest waits for Postgre
 before starting the web container. `/healthz` is a process liveness endpoint; it does not query
 the database. The container's healthcheck runs internally, so it needs no public-path exemption.
 
-The schema uses `CREATE TABLE IF NOT EXISTS` for the initial table. When extending the app,
-use versioned migrations for changes to existing columns and tables.
+The schema lives in `schema.sql` and is applied on first use. It uses `CREATE TABLE IF NOT
+EXISTS` for the initial table, so repeated starts are safe. When extending the app, use
+versioned migrations for changes to existing columns and tables.
 
 ## AppHaven
 

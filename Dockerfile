@@ -19,6 +19,9 @@ ENV HOSTNAME=0.0.0.0
 # output: "standalone" emits a server.js plus only the traced dependencies.
 COPY --from=builder --chown=node:node /app/.next/standalone ./
 COPY --from=builder --chown=node:node /app/.next/static ./.next/static
+# Output tracing already picks this up, but copy it explicitly so the image does not
+# depend on that static analysis resolving the runtime path.
+COPY --from=builder --chown=node:node /app/schema.sql ./schema.sql
 
 USER node
 EXPOSE 8080

@@ -1,3 +1,6 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+
 import { Pool, type QueryResultRow } from "pg";
 
 // Next.js reloads modules in development, so the pool and the schema promise
@@ -19,19 +22,17 @@ function getPool(): Pool {
   return globalForDb.apphavenPool;
 }
 
-const CREATE_TABLE = `
-  CREATE TABLE IF NOT EXISTS todos (
-    id         BIGSERIAL PRIMARY KEY,
-    title      TEXT        NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-  )
-`;
+// schema.sql sits next to the standalone server.js in the image and at the project
+// root in development, so the working directory resolves it in both.
+function readSchema(): Promise<string> {
+  return readFile(path.join(process.cwd(), "schema.sql"), "utf8");
+}
 
 // Retries so the app survives PostgreSQL not being ready yet.
 async function createSchema(): Promise<void> {
   for (let attempt = 1; ; attempt += 1) {
     try {
-      await getPool().query(CREATE_TABLE);
+      await getPool().query(await readSchema());
       return;
     } catch (error) {
       if (attempt >= 30) throw error;
